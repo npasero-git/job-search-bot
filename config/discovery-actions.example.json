@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "last_updated": null,
+  "_comment": "Copy this file to DISCOVERY-ACTIONS.json in your private job-scout directory. Web-discovery owns LinkedIn/web/manual source-resolution actions; Indeed may add fallback new-company actions; ATS consumes verified actions. Keep your live file private.",
+  "actions": [
+    {
+      "id": "example-company-example-title",
+      "status": "open",
+      "action": "resolve_first_party_source",
+      "target_skill": "ats",
+      "company": "Example Company",
+      "title": "Product Manager, Example Domain",
+      "location": "Remote",
+      "lane": "unknown",
+      "priority": "medium",
+      "source_signal": "manual",
+      "source_url": "https://example.com/original-signal",
+      "first_party_url": null,
+      "ats_provider": "unknown",
+      "ats_config": {},
+      "evidence": "Manual or aggregator signal only; requires first-party verification before recurring ATS coverage.",
+      "created_on": "YYYY-MM-DD",
+      "expires_on": "YYYY-MM-DD",
+      "attempt_count": 0,
+      "last_attempted_on": null,
+      "notes": [
+        "Replace or delete this sample action before production use."
+      ]
+    }
+  ]
+}

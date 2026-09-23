@@ -1,0 +1,191 @@
+{
+  "version": 2,
+  "_comment": "Example single source of truth for job-scout targets. Replace examples with your own companies. The ATS examples reflect real provider patterns used by SKILL-ats.md.",
+  "companies": [
+    {
+      "name": "Greenhouse Example",
+      "tier": "1",
+      "category": "curated",
+      "source": "curated",
+      "source_status": "active",
+      "indeed_keywords": ["Greenhouse Example Product Manager"],
+      "ats": [
+        {
+          "provider": "greenhouse",
+          "slug": "greenhouse-board-slug"
+        }
+      ],
+      "search_mode": "full",
+      "surface_count": 0,
+      "last_surfaced_on": null,
+      "note": "Greenhouse uses boards-api.greenhouse.io/v1/boards/{slug}/jobs?content=true."
+    },
+    {
+      "name": "Ashby Example",
+      "tier": "1",
+      "category": "curated",
+      "source": "curated",
+      "source_status": "active",
+      "indeed_keywords": ["Ashby Example Product Manager"],
+      "ats": [
+        {
+          "provider": "ashby",
+          "slug": "ashby-board-slug"
+        }
+      ],
+      "search_mode": "full",
+      "surface_count": 0,
+      "last_surfaced_on": null,
+      "note": "Ashby uses api.ashbyhq.com/posting-api/job-board/{slug}. Do not append includeCompensation=true; some tenants reject it."
+    },
+    {
+      "name": "Lever Example",
+      "tier": "2",
+      "category": "curated",
+      "source": "curated",
+      "source_status": "active",
+      "indeed_keywords": ["Lever Example Product Manager"],
+      "ats": [
+        {
+          "provider": "lever",
+          "slug": "lever-company-slug"
+        }
+      ],
+      "search_mode": "full",
+      "surface_count": 0,
+      "last_surfaced_on": null,
+      "note": "Lever uses api.lever.co/v0/postings/{slug}?mode=json."
+    },
+    {
+      "name": "iCIMS JSON API Example",
+      "tier": "2",
+      "category": "curated",
+      "source": "curated",
+      "source_status": "active",
+      "indeed_keywords": ["iCIMS JSON Example Product Manager"],
+      "ats": [
+        {
+          "provider": "icims",
+          "endpoint": "https://careers.example.com/api/jobs?page={page}&limit=100",
+          "type": "json_api",
+          "fetch_method": "bash_curl"
+        }
+      ],
+      "search_mode": "full",
+      "surface_count": 0,
+      "last_surfaced_on": null,
+      "note": "Large iCIMS-style JSON API. Full JDs may already be in the API response. Use bash_curl when web_fetch truncates large JSON."
+    },
+    {
+      "name": "iCIMS HTML Category Example",
+      "tier": "2",
+      "category": "curated",
+      "source": "curated",
+      "source_status": "active",
+      "indeed_keywords": [],
+      "indeed_broken": true,
+      "ats": [
+        {
+          "provider": "icims",
+          "endpoint": "https://careers.example.com/search-jobs?category-filter=PRODUCT_MANAGEMENT",
+          "type": "html_category",
+          "fetch_method": "web_fetch",
+          "drill_in_base": "https://careers.example.com"
+        }
+      ],
+      "search_mode": "full",
+      "surface_count": 0,
+      "last_surfaced_on": null,
+      "note": "iCIMS-style HTML category page. Parse list-page job links, then drill into each job page for full JD. indeed_broken=true is appropriate when the company name is too generic for reliable Indeed coverage."
+    },
+    {
+      "name": "Example Signal-Only Discovery",
+      "tier": "3",
+      "category": "signal-only",
+      "source": "linkedin_discovery",
+      "source_status": "signal_only",
+      "search_mode": "signal_only",
+      "discovery_priority": "medium",
+      "linkedin_mention_count": 1,
+      "indeed_keywords": [],
+      "ats": [],
+      "added_on": "YYYY-MM-DD",
+      "surface_count": 0,
+      "last_surfaced_on": null,
+      "note": "Example of a signal-only company. LinkedIn writes urgent stubs only; web-discovery verifies first-party sources before creating DISCOVERY-ACTIONS entries or recurring company coverage."
+    },
+    {
+      "name": "Example Verified Discovery",
+      "tier": "3",
+      "category": "web-discovery",
+      "source": "web_discovery",
+      "source_status": "probation",
+      "source_status_since": "YYYY-MM-DD",
+      "probation_attempts": 0,
+      "indeed_keywords": ["Example Verified Discovery Product Manager"],
+      "ats": [
+        {
+          "provider": "greenhouse",
+          "slug": "verified-greenhouse-slug"
+        }
+      ],
+      "search_mode": "full",
+      "surface_count": 0,
+      "last_surfaced_on": null,
+      "note": "Example of a first-party source verified by web-discovery and activated by ATS on probation."
+    }
+  ],
+  "indeed_config": {
+    "pass_2_pm_anchored": {
+      "keywords": [
+        "Product Manager target-lane-keyword",
+        "Product Manager adjacent-lane-keyword"
+      ],
+      "us_locations": [
+        "Target State",
+        "Target Metro",
+        "Remote"
+      ]
+    }
+  },
+  "slug_invalid_history": [],
+  "ats_endpoints": {
+    "greenhouse": {
+      "endpoint_template": "https://boards-api.greenhouse.io/v1/boards/{slug}/jobs?content=true",
+      "method": "GET",
+      "fetcher": "web_fetch"
+    },
+    "ashby": {
+      "endpoint_template": "https://api.ashbyhq.com/posting-api/job-board/{slug}",
+      "method": "GET",
+      "fetcher": "web_fetch",
+      "_comment": "Do not append includeCompensation=true by default; some tenants reject it. Parse compensation from descriptionHtml when structured compensation is absent."
+    },
+    "lever": {
+      "endpoint_template": "https://api.lever.co/v0/postings/{slug}?mode=json",
+      "method": "GET",
+      "fetcher": "web_fetch"
+    },
+    "workday": {
+      "search_endpoint_template": "https://{host}/wday/cxs/{tenant}/{site}/jobs",
+      "search_method": "POST",
+      "search_body_template": {
+        "appliedFacets": {},
+        "limit": 20,
+        "offset": 0,
+        "searchText": "{search_text}"
+      },
+      "search_text_variants": [
+        "Product Manager",
+        "Senior Product Manager",
+        "AI Product Manager"
+      ],
+      "fetcher": "bash_curl",
+      "required_headers": {
+        "Cache-Control": "no-cache, no-store",
+        "Pragma": "no-cache"
+      },
+      "_comment": "Use curl subprocess with no-cache headers. Run Workday before Greenhouse to reduce stale proxy-cache responses. Keep limit at 20; some Workday tenants reject larger values."
+    }
+  }
+}

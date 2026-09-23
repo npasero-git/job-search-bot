@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "last_updated": null,
+  "_comment": "Copy this file to role-ledger.json in your private job-scout directory. It tracks real-world roles across multiple sources so the bot does not create duplicate active lead files.",
+  "roles": []
+}
