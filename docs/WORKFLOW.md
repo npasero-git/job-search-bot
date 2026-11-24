@@ -31,4 +31,12 @@ Source failures go to existing repair actions. A repair may change only a determ
 
 ## Verification Limits
 
+Developer checks: run `python3 -m unittest discover -s tests -v` from the repository. Tests are offline development checks, not steps for scheduled scouts.
+
 Offline tests cover setup, lock ownership, arithmetic, source identity, bounded pagination, publication handling and synthetic persistence. They do not test live email mutation, every current career endpoint, unattended scheduling or model interpretation accuracy. Source notes are contracts to verify, not guarantees of current availability.
+
+## Updating An Existing Workspace
+
+Do not rerun init over existing files. Review the current rubric and weights through the wizard, replace the retired absent_preferred_score setting with the chosen weights, and update scoring instructions and the arithmetic helper together. Preserve leads, receipts, ledgers and source configuration. Historical A/B/C scores are not fit-v2 scores; do not mechanically regrade them. Validation rejects the retired setting rather than silently changing its meaning.
+
+Setup copies skills and the rubric to Instructions, public source examples to Runtime/main, and retrieval/arithmetic helpers to tools. Settings remain authoritative for user choices; validation derives candidate-profile.md from their profile fields. Keep that workspace outside the checkout. Initialization installs no connectors, cloud services or schedules. Authorize service connections separately and verify a supervised run before recurring work.
