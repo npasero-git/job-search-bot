@@ -1,33 +1,23 @@
 # Job Scout
 
-An agent-assisted job search: email alerts → web discovery → company job boards → optional Indeed. Produces scored leads with full job descriptions and visible uncertainties. Never applies or contacts employers for you.
+Job Scout helps you find openings that fit your experience and what you want next. It reads job-alert emails, searches for opportunities and checks company career pages, then builds a shortlist with full job descriptions, fit assessments and important gaps. You decide which roles to pursue; it never applies or contacts employers for you.
 
 ## Start Here
 
-1. Download and extract the repository ZIP, or clone it. You can start from Downloads.
-2. Open it in an agent with local file access and web tools, such as Codex or Claude Cowork. Python3.10+ is required. An ordinary chat without file access cannot complete setup.
-3. Paste this prompt:
+Open **Codex or Claude Cowork** with access to files on your computer, and paste:
 
-> Read AGENTS.md, then walk me through docs/WELCOME.md. Keep it brief and help me customize the starting rubric. Set up a permanent folder on my computer, validate access, give me LinkedIn searches and alert instructions, and show me an example before live searches. Ask before scheduling tasks or archiving email.
+> Help me set up Job Scout from https://github.com/npasero-git/job-search-bot. Download the full repository, read AGENTS.md, and guide me through the welcome wizard in docs/WELCOME.md. Ask about my goals, experience and constraints, and where I want to keep my job-search files. Handle the technical setup, help me customize how jobs are ranked, and give me LinkedIn search and email-alert instructions. Show me an example and where to review my leads. Ask before starting live searches, scheduling tasks or archiving email.
 
-**Start with the wizard; no manual configuration is needed beforehand.** The agent gathers your answers and creates the configuration. You authorize service connections, enable LinkedIn alerts, review a small trial run, and then approve scheduling.
+The **welcome wizard is a guided conversation**: you explain your needs, and the agent creates your private workspace and configuration. No manual configuration is needed beforehand. It will ask for any necessary file or service access.
 
-Downloads is the starting package, not the permanent workspace. Choose a folder such as `Documents/Employment/Job Scout`; the agent must verify access there rather than silently using an app-owned or temporary folder.
+If the agent cannot download the repository, use **Code → Download ZIP** on GitHub, extract it, and give the agent access to that folder to continue setup.
 
-Indeed is optional and supported only through Claude's search/full-job-detail connector in this release. The ChatGPT Indeed app isn't a supported replacement; use bots1–3 in ChatGPT/Codex where their tools are available.
-
-For manual setup, follow [the wizard](docs/WELCOME.md):
-
-```sh
-python3 scripts/setup.py init --workspace /absolute/private/job-scout
-# Complete Instructions/settings.json in that private workspace.
-python3 scripts/setup.py validate --workspace /absolute/private/job-scout
-```
+**The Indeed-connected scout (Bot4) is optional.** It uses Claude's Indeed search and full-job-detail connector. The ChatGPT Indeed app isn't supported by this workflow; bots1–3 can run in Codex or Cowork with the required tools.
 
 ## Run And Review
 
-Run **1. Email → 2. Discovery → 3. ATS → 4. Indeed, if enabled**, sequentially or on suitably spaced schedules. Gates prevent overlap; they don't queue skipped runs. A due daily ATS sweep can run independently after upstream failure. Setup creates no schedules.
+The wizard helps you choose a schedule, put the scouts in the right order and review a small trial before enabling recurring searches.
 
-Review the private `Leads/Yes` queue. Keep resumes, pay requirements, profile answers and runtime files outside this public checkout. Scores prioritize review; they aren't hiring predictions.
+Your shortlist appears in `Leads/Yes` inside your chosen workspace. The agent shows you how to review matches, uncertainties and search coverage, and how to adjust your preferences as you learn what works. Your resume, preferences and results stay in that private workspace.
 
-Details: [onboarding](docs/WELCOME.md) · [rubric](config/rubric.template.md) · [workflow, upgrades and tests](docs/WORKFLOW.md) · [company sources](docs/COMPANIES_SCHEMA.md).
+Details: [welcome wizard](docs/WELCOME.md) · [rubric](config/rubric.template.md) · [technical setup and workflow](docs/WORKFLOW.md) · [company sources](docs/COMPANIES_SCHEMA.md).

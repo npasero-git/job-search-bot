@@ -1,6 +1,6 @@
 # Welcome To Job Scout
 
-Start with the work you want and the experience you bring. Short answers are enough; “unknown” is fine. Your answers stay in a private workspace outside this repository.
+Your agent guides you through these questions and handles the technical setup. Start with the work you want and the experience you bring. Short answers are enough; “unknown” is fine. Your answers stay in a private workspace outside this repository.
 
 ## 1. Your Next Role
 
@@ -41,11 +41,11 @@ Choose useful companies from the starter list. Bots1–3 read job-alert emails, 
 
 **Put these searches into LinkedIn Jobs and turn on daily email alerts so Bot1 has emails to read.** Review the results first; see [LinkedIn's alert settings](https://www.linkedin.com/help/linkedin/answer/a1420165). Check that the bot finds the first delivered alert.
 
-**Indeed is optional and Claude-only for this release.** Bot4 needs Claude's Indeed search and full-job-detail connector. The ChatGPT Indeed app isn't a supported replacement; use bots1–3 in ChatGPT/Codex.
+**The Indeed-connected scout (Bot4) is optional and Claude-only for this release.** It needs Claude's Indeed search and full-job-detail connector. The ChatGPT Indeed app isn't a supported replacement; use bots1–3 in Codex or Cowork with the required tools.
 
 ## 6. Review And Start Small
 
-Choose a permanent folder on your computer, such as Documents/Employment/Job Scout, and a timezone. The agent checks access there before installing or scheduling anything. If access fails, resolve it in the app; setup must not silently switch folders. Confirm your profile, constraints and rubric, and choose email/archive permissions; archiving starts off.
+Where would you like to keep your job-search files? For example, Documents/Employment/Job Scout. What timezone and morning delivery time would you prefer? Your agent confirms the folder and checks access before setting it up. Confirm your profile, constraints and rubric, and choose email/archive permissions; archiving starts off.
 
 Your final setup summary should contain:
 
@@ -53,9 +53,11 @@ Your final setup summary should contain:
 - The saved private workspace and your chosen rubric.
 - Your LinkedIn search/alert instructions and any pending delivery check.
 - Email permissions and either “Indeed disabled” or “Claude Indeed connector verified.”
+- The proposed run order and schedule, whether tasks are enabled, and any remaining setup steps.
+- Where to review leads and search coverage, and how to change your preferences.
 
-Follow the [setup and validation commands](../README.md#start-here), inspect a synthetic example, then approve a small supervised run. Review a real lead before scheduling recurring work. The scouts never apply or contact employers for you.
+Your agent completes and checks the setup, then shows you a synthetic example. Approve a small supervised search and review a real lead before scheduling recurring work. The scouts never apply or contact employers for you.
 
-**Scheduling:** the normal order is **1. Email alerts → 2. Web discovery → 3. Company job boards → 4. Indeed, if enabled.** Start each after the previous stage finishes where your scheduler supports it; otherwise space start times using observed run durations and allow a buffer. Choose your timezone and preferred morning delivery time during setup.
+**Scheduling:** the normal order is **1. Email alerts → 2. Web discovery → 3. Company job boards → 4. Indeed-connected scout, if enabled.** Your agent arranges that order using the scheduler's available controls and the time each stage needs. It reports anything you must finish in the app.
 
-The gates prevent premature or duplicate work; they don't queue a blocked run for later. Check skipped/failed stages after the first scheduled cycle. A due daily company-board sweep can still run if upstream work fails, so one failure needn't stop all coverage. See [run-order details](../README.md#run-and-review).
+**Reviewing results:** open `Leads/Yes` in your chosen folder. Your agent walks through the fit assessment, important gaps and any missing information, then shows which sources ran or were blocked. After the first scheduled cycle, check for skipped or failed stages before relying on daily coverage. Tell the agent when matches are off-target so you can review changes to your preferences or rubric together.
