@@ -21,7 +21,7 @@
   "discovery_queries": [],
   "freshness_days": 7,
   "review_threshold": 70,
-  "absent_preferred_score": 15,
+  "weights": {"required": 40, "preferred": 20, "domain": 15, "trajectory": 10, "scope": 10, "company": 5},
   "budgets": {"web_search_calls": 25, "web_fetch_calls": 40, "new_actions": 20, "company_recovery": 1, "optional_queries": 4, "indeed_calls": 60},
   "tools": {"email_enabled": false, "archive_email": false, "indeed_enabled": false}
 }

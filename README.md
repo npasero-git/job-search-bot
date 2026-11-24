@@ -10,7 +10,7 @@ Bot 4 is supported only in Claude with its Indeed connector in this release. The
 
 Ask your agent:
 
-> Walk me through docs/WELCOME.md. Explain consequential tradeoffs and let me leave answers unknown. Give me tailored, copy-ready LinkedIn Jobs search queries and the filters/email-alert settings to use for each. Explain the Claude-only Indeed stage. Create my private settings outside this repository, initialize the workspace, validate it, and show me a synthetic lead before running live searches. Do not schedule tasks or archive email without my approval.
+> Walk me through docs/WELCOME.md, starting with my needs and experience. Keep it brief and let me leave answers unknown. Help me customize the starting rubric without a scoring lecture. Give me copy-ready LinkedIn searches and email-alert settings, and explain the optional Claude-only Indeed stage. Create and validate my private workspace, then show me a synthetic lead before live searches. Do not schedule tasks or archive email without my approval.
 
 Or follow [the welcome wizard](docs/WELCOME.md) yourself. With Python 3.10+:
 
@@ -39,7 +39,7 @@ Review `Leads/Yes` for eligible leads and promising unscored checks, `Leads/No` 
 ## Included
 
 - Four stage prompts and shared locking/output rules.
-- Configurable PM-oriented rubric with explicit alternatives, preferred-evidence accounting and credible transfers.
+- Customizable six-component rubric with evidence-based qualifications, domain fit, trajectory, scope and company preference; exact required/domain proration when preferences are absent.
 - Full public company/source starter universe, plus a regional employer seed set. Inclusion is not an endorsement or a fresh endpoint guarantee.
 - Bounded Workday retrieval and source-bound caching; custom sources retain extraction contracts.
 - Private setup validation and offline synthetic regression/integration tests.
@@ -59,6 +59,8 @@ The title examples are PM-oriented. Changing function requires reviewing title f
 | `scripts/ats_fetch.py`, `scripts/scout_io.py` | `tools/` |
 
 See [company contracts](docs/COMPANIES_SCHEMA.md), [scoring examples](docs/SCORING_EXAMPLES.md), and [workflow boundaries](docs/WORKFLOW.md). Tests are developer checks, not steps for scheduled runs.
+
+Existing workspace: do not rerun init over your files. Review the new rubric and weights through the wizard, replace the retired absent_preferred_score setting with the chosen weights, and update the scoring instructions and arithmetic helper together. Keep ledgers, leads, receipts and source configuration intact; historical A/B/C scores are not fit-v2 scores. Validation rejects the retired setting rather than silently changing its meaning.
 
 ## Privacy And Limits
 

@@ -5,7 +5,7 @@ import re
 import shutil
 from pathlib import Path
 from zoneinfo import ZoneInfo
-from scout_io import RunLock, atomic_text
+from scout_io import RunLock, atomic_text, validate_weights
 
 REPO = Path(__file__).resolve().parents[1]
 
@@ -36,7 +36,10 @@ def validate_settings(s):
             raise ValueError("Tool permissions must be boolean")
     if s["tools"]["archive_email"] and not s["tools"]["email_enabled"]:
         raise ValueError("Archiving requires email to be enabled")
-    for key, high in (("freshness_days", 365), ("review_threshold", 100), ("absent_preferred_score", 25)):
+    if "absent_preferred_score" in s:
+        raise ValueError("Retired absent_preferred_score: review the welcome wizard and configure weights")
+    validate_weights(s["weights"])
+    for key, high in (("freshness_days", 365), ("review_threshold", 100)):
         if type(s[key]) is not int or not 0 <= s[key] <= high:
             raise ValueError("Invalid " + key)
     for key in ("web_search_calls", "web_fetch_calls", "new_actions", "company_recovery", "optional_queries", "indeed_calls"):

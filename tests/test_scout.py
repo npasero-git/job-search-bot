@@ -31,7 +31,8 @@ def settings():
 
 
 def breakdown():
-    return {"A": 47, "B": 24, "C": 18, "domain_adjustment": 0, "cap": None,
+    return {"rubric_version": "fit-v2", "A": 47, "B": 24, "D": 12, "T": 8, "S": 9, "K": 3,
+            "preferred_status": "present", "full_jd": True, "cap": None,
             "deductions": [{"points": 3, "clause": "Industrial protocol expertise",
                             "evidence": "Related instrumentation work; protocol depth partial."}]}
 
@@ -177,19 +178,81 @@ class RetrievalTests(unittest.TestCase):
 class PersistenceTests(unittest.TestCase):
     def test_unscored_or_hard_floor_cannot_be_apply(self):
         with tempfile.TemporaryDirectory() as d:
+            p = setup.initialize(Path(d) / "workspace")
+            s = settings(); s["review_threshold"] = 10
+            io.atomic_json(p / "Instructions/settings.json", s)
             job = {"company":"Example", "title":"PM", "priority":"Apply"}
-            with self.assertRaises(ValueError): io.write_lead(d, job, None)
-            b = breakdown(); b.update(A=30, domain_adjustment=-15)
-            b["deductions"] = [{"points":20, "clause":"Required domain", "evidence":"Absent"}]
-            with self.assertRaises(ValueError): io.write_lead(d, job, b, threshold=50)
+            with self.assertRaises(ValueError): io.write_lead(p, job, None)
+            b = breakdown(); b.update(A=10)
+            b["deductions"] = [{"points":20, "clause":"Required capability " + str(i), "evidence":"Absent"} for i in range(2)]
+            with self.assertRaises(ValueError): io.write_lead(p, job, b)
 
     def test_arithmetic_cap_and_duplicate_gap_mismatch(self):
         b = breakdown()
-        self.assertEqual(io.validated_score(b), 89)
+        self.assertEqual(io.validated_score(b, settings()["weights"]), 88.8)
         b["cap"] = 70
-        self.assertEqual(io.validated_score(b), 70)
+        self.assertEqual(io.validated_score(b, settings()["weights"]), 70)
         b["deductions"] *= 2
-        with self.assertRaises(ValueError): io.validated_score(b)
+        with self.assertRaises(ValueError): io.validated_score(b, settings()["weights"])
+
+    def test_exact_absence_proration_and_custom_weights(self):
+        b = breakdown(); b.update(B=None, preferred_status="absent")
+        self.assertAlmostEqual(io.validated_score(b, settings()["weights"]), 964/11)
+        w = dict(required=30, preferred=30, domain=20, trajectory=10, scope=5, company=5)
+        self.assertAlmostEqual(io.validated_score(b, w), 86.22)
+        # Increasing scope by one raw point still adds exactly its unchanged weight fraction.
+        b["S"] = 10
+        self.assertAlmostEqual(io.validated_score(b, w), 86.72)
+
+    def test_absent_unknown_unmet_are_distinct_and_caps_are_last(self):
+        b = breakdown(); b.update(B=None, preferred_status="absent", cap=70)
+        self.assertEqual(io.validated_score(b, settings()["weights"]), 70)
+        b.update(full_jd=False)
+        with self.assertRaises(ValueError): io.validated_score(b, settings()["weights"])
+        b.update(preferred_status="unknown", cap=None)
+        self.assertEqual(io.validated_score(b, settings()["weights"]), 60)
+        b.update(preferred_status="present", B=0, full_jd=True)
+        self.assertEqual(io.validated_score(b, settings()["weights"]), 69.6)
+
+    def test_invalid_weights_and_legacy_receipts_rejected(self):
+        for field, value in (("required", -1), ("preferred", True), ("scope", float("nan")), ("domain", float("inf"))):
+            s = settings(); s["weights"][field] = value
+            with self.assertRaises(ValueError): setup.validate_settings(s)
+        for w in (dict(required=0, preferred=75, domain=0, trajectory=10, scope=10, company=5),
+                  dict(required=40, preferred=20, domain=15, trajectory=10, scope=10, company=0)):
+            with self.assertRaises(ValueError): io.validate_weights(w)
+        s = settings(); s["absent_preferred_score"] = 15
+        with self.assertRaises(ValueError): setup.validate_settings(s)
+        for change in ({"C":18}, {"domain_adjustment":-15}, {"rubric_version":"old"}):
+            b = dict(breakdown(), **change)
+            with self.assertRaises(ValueError): io.validated_score(b, settings()["weights"])
+        b = breakdown(); b["weights"] = dict(settings()["weights"], required=45)
+        with self.assertRaises(ValueError): io.validated_score(b, settings()["weights"])
+
+    def test_zero_preferred_and_fractional_custom_weights(self):
+        w = dict(required=42.5, preferred=0, domain=27.5, trajectory=10, scope=15, company=5)
+        present = io.validated_score(breakdown(), w)
+        b = breakdown(); b.update(B=None, preferred_status="absent")
+        self.assertEqual(io.validated_score(b, w), present)
+        b.update(A=50, D=15, T=10, S=10, K=5, deductions=[])
+        self.assertEqual(io.validated_score(b, w), 100)
+
+    def test_writer_uses_custom_settings_and_unrounded_threshold(self):
+        with tempfile.TemporaryDirectory() as d:
+            p = setup.initialize(Path(d) / "private")
+            s = settings(); s["weights"].update(required=30, preferred=30, domain=20, trajectory=10, scope=5, company=5)
+            io.atomic_json(p / "Instructions/settings.json", s)
+            setup.validate_workspace(p)
+            b = breakdown(); b.update(B=None, preferred_status="absent")
+            job = dict(company="Example", title="PM", listing_url="https://example.test/1", summary="Synthetic", priority="Review")
+            path = io.write_lead(p, job, b)
+            self.assertTrue(path.name.startswith("86.22."))
+            self.assertEqual(json.loads((p / "Instructions/settings.json").read_text())["weights"], s["weights"])
+            io.atomic_json(p / "Instructions/settings.json", settings())
+            b = breakdown(); b.update(B=0, D=12.399)
+            path = io.write_lead(p, dict(job, title="Boundary PM"), b)
+            self.assertEqual(path.parent.name, "No")
+            self.assertTrue(path.name.startswith("69.99."))
 
     def test_wrong_lock_owner_not_released(self):
         with tempfile.TemporaryDirectory() as d:
@@ -220,7 +283,7 @@ class PersistenceTests(unittest.TestCase):
                            description=source["content"], gaps="Protocol depth partial; work location unresolved.",
                            priority="Review")
                 lead = io.write_lead(p, job, breakdown())
-                self.assertTrue(lead.name.startswith("89."))
+                self.assertTrue(lead.name.startswith("88.8."))
                 self.assertIn(source["content"], lead.read_text())
                 self.assertNotIn("score_breakdown", lead.read_text())
                 with self.assertRaises(FileExistsError): io.write_lead(p, job, breakdown())
@@ -229,7 +292,7 @@ class PersistenceTests(unittest.TestCase):
                 io.atomic_json(runtime/"seen-jobs.json", {"seen_job_ids":[cid]})
                 action["status"] = "consumed"
                 io.atomic_json(runtime/"DISCOVERY-ACTIONS.json", {"version":1,"actions":[action]})
-                io.atomic_json(runtime/"run-test-ats.json", {"status":"COMPLETE","score":89,"score_breakdown":breakdown()})
+                io.atomic_json(runtime/"run-test-ats.json", {"status":"COMPLETE","score":88.8,"score_breakdown":breakdown(),"weights":settings()["weights"]})
                 self.assertIn(cid, json.loads((runtime/"seen-jobs.json").read_text())["seen_job_ids"])
                 manual = io.write_lead(p, dict(job,title="Unresolved exact role"), None)
                 self.assertTrue(manual.name.startswith("Manual Check"))

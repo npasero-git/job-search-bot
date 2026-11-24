@@ -40,7 +40,7 @@ One retry on transient failures, fifteen-second wait on429, bounded timeout. Res
 
 ## Score And Persist
 
-Use rubric.md literally. Before deductions, check alternatives, requested depth, required/preferred status and duplicate penalties. Include all explicit preferences, use the documented absent-preference convention, and verify cap conditions. Record compact score_breakdown with A/B/C, deductions and evidence, preferred tally, domain adjustment and cap; validate arithmetic with tools/scout_io.py. Do not use a generic rationale instead of the calculation.
+Use rubric.md and settings.weights. Before deductions, check alternatives, depth, required/preferred status and duplicate penalties. Include embedded preferences. Only confirmed absence in a complete JD permits exact required/domain proration; unknown evidence does not. Use the fit-v2 receipt contract (A/B/D/T/S/K, evidence, preferred tally/status, full_jd, weights, proration, cap and unrounded total). Check arithmetic with tools/scout_io.py validated_score(breakdown, settings["weights"]); write_lead reads the same settings. No legacy A+B+C, neutral B15 or generic-domain penalty. Do not replace the calculation with a generic rationale or change historical scores merely because the rubric changed.
 
 Exact source IDs/listing URLs already seen suppress new active files. Only changed full JDs or explicit rescore requests permit a refresh of that record. Check probable cross-source duplicates by product/team/req after detail retrieval; uncertain distinct roles remain visible with a diagnostic, not broad fuzzy suppression. Recheck before write.
 
