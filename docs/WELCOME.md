@@ -55,3 +55,7 @@ Your final setup summary should contain:
 - Email permissions and either “Indeed disabled” or “Claude Indeed connector verified.”
 
 Follow the [setup and validation commands](../README.md#start-here), inspect a synthetic example, then approve a small supervised run. Review a real lead before scheduling recurring work. The scouts never apply or contact employers for you.
+
+**Scheduling:** the normal order is **1. Email alerts → 2. Web discovery → 3. Company job boards → 4. Indeed, if enabled.** Start each after the previous stage finishes where your scheduler supports it; otherwise space start times using observed run durations and allow a buffer. Choose your timezone and preferred morning delivery time during setup.
+
+The gates prevent premature or duplicate work; they don't queue a blocked run for later. Check skipped/failed stages after the first scheduled cycle. A due daily company-board sweep can still run if upstream work fails, so one failure needn't stop all coverage. See [run-order details](../README.md#run-and-review).
