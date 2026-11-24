@@ -116,8 +116,11 @@ def _validate_workspace(path):
         raise ValueError("Email enabled without approved sources")
     for source in sources["sources"]:
         query = source["gmail_query"]
-        if unresolved(source) or not ("from:" in query or "label:job-scout-alert" in query) or not ("newer_than:" in query or "after:" in query):
-            raise ValueError("Email query needs an approved sender/label and time bound")
+        scoped = (re.search(r"(?:^|[\s{])from:\S", query)
+                  or "label:job-scout-alert" in query
+                  or re.search(r'subject:"(?:job alerts?|new jobs|new roles|new openings|job opportunities)"', query))
+        if unresolved(source) or not scoped or not ("newer_than:" in query or "after:" in query):
+            raise ValueError("Email query needs a sender/alert label/job-alert subject and time bound")
         if type(source["max_threads"]) is not int or source["max_threads"] <= 0:
             raise ValueError("Invalid email source limit")
         if type(source.get("archive_after_processing")) is not bool:

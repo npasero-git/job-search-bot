@@ -1,6 +1,6 @@
 ---
 name: job-scout-linkedin
-description: Read only configured job-alert email sources and persist signals for first-party discovery.
+description: Triage LinkedIn alerts and a bounded general search for recent new-job emails into first-party discovery signals.
 ---
 
 # Job-Alert Emails
@@ -11,7 +11,9 @@ If email_enabled is false, report disabled without querying email. Otherwise ver
 
 ## Collect
 
-Read companies.json, linkedin-processed.json and email-alert-sources.json. Use only each configured gmail_query, source max_threads and total limit. Every query must be bounded by an approved sender or dedicated job-alert label and a time window. Never broaden to the whole inbox. Overlapping searches deduplicate by message ID.
+Read companies.json, linkedin-processed.json and email-alert-sources.json. The public starter uses two searches: LinkedIn job alerts, and recent new-opening emails selected by job-alert subject phrases across other senders. Use only the approved gmail_query, source max_threads and total limit; retain the time window. Do not turn the general alert search into an unrestricted inbox search. Overlapping searches deduplicate by message ID.
+
+Review sender/subject/snippet first where the connector exposes them; skip obvious replies, application updates and unrelated mail before fetching bodies. Read bodies only for plausible new-opening alerts. Use the same general job-block extraction for non-LinkedIn messages; no employer-specific sender registry or parser is required. Subject wording can miss some alerts; adjust the small generic phrase set only from observed examples, without building a company-by-company rules catalog.
 
 Inspect every selected message's actual sender and subject and confirm it announces new openings. Recruiter replies, application status, newsletters and account notices do not qualify merely because they share a sender. Parse full MIME text/plain, or decoded HTML if necessary; missing/truncated content remains unprocessed and unarchived.
 

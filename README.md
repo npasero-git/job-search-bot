@@ -4,11 +4,13 @@ A personal job-search workflow: email alerts -> first-party discovery -> ATS ret
 
 This is an agent-operated workflow, not a standalone search service. Your agent needs local file access, public web retrieval and, optionally, connected email and Indeed tools. Tool availability and scheduling vary by harness; an installed app alone does not establish unattended access. Setup installs no cloud service, paid API or recurring task.
 
+Bot 4 is supported only in Claude with its Indeed connector in this release. The ChatGPT Indeed app does not supply a supported replacement for this automated search/detail workflow. Use bots 1-3 in ChatGPT/Codex where their required tools are available; leave Indeed disabled. See the welcome wizard for this choice and the LinkedIn email-alert setup.
+
 ## Start Here
 
 Ask your agent:
 
-> Walk me through docs/WELCOME.md. Explain consequential tradeoffs and let me leave answers unknown. Create my private settings outside this repository, initialize the workspace, validate it, and show me a synthetic lead before running live searches. Do not schedule tasks or archive email without my approval.
+> Walk me through docs/WELCOME.md. Explain consequential tradeoffs and let me leave answers unknown. Give me tailored, copy-ready LinkedIn Jobs search queries and the filters/email-alert settings to use for each. Explain the Claude-only Indeed stage. Create my private settings outside this repository, initialize the workspace, validate it, and show me a synthetic lead before running live searches. Do not schedule tasks or archive email without my approval.
 
 Or follow [the welcome wizard](docs/WELCOME.md) yourself. With Python 3.10+:
 
@@ -25,10 +27,10 @@ Initialization refuses an existing destination and creates no schedules or netwo
 
 After reviewing the private profile and settings, ask the agent to run the corresponding file in `Instructions/`:
 
-1. `SKILL-linkedin.md`: configured job-alert email sources only; no LinkedIn scraping.
+1. `SKILL-linkedin.md`: LinkedIn alerts plus a bounded general search for recent new-job emails; no LinkedIn scraping or employer-specific email integrations.
 2. `SKILL-web-discovery.md`: verify first-party roles and repair source connections.
 3. `SKILL-ats.md`: retrieve configured sources, apply the rubric and write leads.
-4. `SKILL-indeed.md`: optional, only when authenticated search/detail tools are actually available.
+4. `SKILL-indeed.md`: optional Claude Indeed connector stage; disabled for ChatGPT/Codex in this release.
 
 Run sequentially for an initial or catch-up run. The shared lock prevents overlap; it does not queue blocked stages. Arrange completion-based sequencing where your harness supports it, or separated schedules with explicit skip reporting. Configure schedules only after a supervised run. A due daily ATS sweep may proceed without newer upstream output, without pretending discovery succeeded.
 
@@ -53,7 +55,7 @@ The title examples are PM-oriented. Changing function requires reviewing title f
 | `config/candidate-profile.example.md` | `Instructions/candidate-profile.md` |
 | `config/rubric.template.md` | `Instructions/rubric.md` |
 | `config/companies.example.json` | `Runtime/main/companies.json` |
-| Empty queue/ledger/email templates | `Runtime/main/` |
+| Empty queue/ledger and generic email-search templates | `Runtime/main/` |
 | `scripts/ats_fetch.py`, `scripts/scout_io.py` | `tools/` |
 
 See [company contracts](docs/COMPANIES_SCHEMA.md), [scoring examples](docs/SCORING_EXAMPLES.md), and [workflow boundaries](docs/WORKFLOW.md). Tests are developer checks, not steps for scheduled runs.

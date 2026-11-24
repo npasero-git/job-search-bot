@@ -1,1 +1,20 @@
-{"version": 1, "max_total_threads_per_run": 20, "sources": []}
+{
+  "version": 1,
+  "max_total_threads_per_run": 20,
+  "sources": [
+    {
+      "id": "linkedin-job-alerts",
+      "gmail_query": "from:linkedin.com newer_than:2d in:inbox {subject:jobs subject:\"job alert\" subject:\"new opportunities\"}",
+      "parser": "linkedin",
+      "archive_after_processing": false,
+      "max_threads": 10
+    },
+    {
+      "id": "recent-job-alerts",
+      "gmail_query": "newer_than:2d in:inbox -from:linkedin.com {subject:\"job alert\" subject:\"new jobs\" subject:\"new roles\" subject:\"new openings\" subject:\"job opportunities\"}",
+      "parser": "job_alert",
+      "archive_after_processing": false,
+      "max_threads": 10
+    }
+  ]
+}

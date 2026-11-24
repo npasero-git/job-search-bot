@@ -4,6 +4,8 @@
 
 Email writes signals, discovery verifies sources, ATS scores first-party jobs, and optional Indeed supplies fallback. All stages share one lock and durable paths. A blocked stage does not claim it ran; a due ATS sweep can work independently of a stalled signal stage. Catch-up runs should be sequential.
 
+The public email stage has LinkedIn alerts and one general recent-job-alert search, with shared extraction rather than employer-specific configurations. Indeed is a Claude-only connector stage for this release, not a supported ChatGPT/Codex automation. If stages use different hosts, they must share the same durable workspace and lock; otherwise leave the optional stage disabled rather than maintaining divergent state.
+
 The public prompts preserve first-party verification, source-bound evidence, bounded Workday variants, custom-source contracts, exact-ID deduplication, publication precedence, unknown-date manual checks, broad retrieval before location decisions, compact score calculations, existing caps, technical repair and partial coverage reporting.
 
 Configuration replaces personal evidence, titles, geography, compensation, domain priorities, resume labels, company rankings, inbox queries and permissions. These differences are intentional. No retired dedicated pivot bot, personal application workflow, cloud transport or production schedules are installed.

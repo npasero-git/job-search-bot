@@ -1,9 +1,11 @@
 ---
 name: job-scout-indeed
-description: Optional authenticated Indeed fallback and discovery, with explicit tool checks and shared evidence rules.
+description: Optional Claude-only Indeed connector fallback for this release, with shared evidence and persistence rules.
 ---
 
 # Indeed Fallback
+
+Supported setup for this release: Claude with its authenticated Indeed connector. ChatGPT/Codex is not a supported Bot 4 automation path; leave indeed_enabled=false there. A ChatGPT Indeed search app is not a drop-in replacement for the connector's search plus full-job-detail workflow. Bots 1-3 remain usable without this stage. Future support requires a separately verified integration, not a changed documentation claim or app installation alone.
 
 Workspace: {{WORKSPACE}}. Read AGENTS.md, settings, profile and rubric; acquire the shared lock before mutable state. If indeed_enabled is false, report disabled. If enabled, discover and verify actual authenticated search and full-job-detail tools. An app mention or installation alone does not prove scheduled availability. Missing tools: report INDEED_UNAVAILABLE, do not fabricate zero leads or substitute web search.
 

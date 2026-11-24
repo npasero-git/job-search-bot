@@ -63,6 +63,8 @@ class SetupTests(unittest.TestCase):
             with self.assertRaises(FileExistsError): setup.initialize(p)
             s = settings(); s["tools"]["email_enabled"] = True
             io.atomic_json(p / "Instructions/settings.json", s)
+            io.atomic_json(p / "Runtime/main/email-alert-sources.json",
+                           {"sources":[], "max_total_threads_per_run":20})
             with self.assertRaises(ValueError): setup.validate_workspace(p)
             self.assertFalse((p / "Runtime/main/.scout.lock").exists())
 
@@ -99,6 +101,23 @@ class SetupTests(unittest.TestCase):
             io.atomic_json(p / "Runtime/main/email-alert-sources.json",
                            {"sources":[source], "max_total_threads_per_run":20})
             setup.validate_workspace(p)
+
+    def test_generic_job_alert_search_and_negative_sender(self):
+        with tempfile.TemporaryDirectory() as d:
+            p = setup.initialize(Path(d) / "workspace")
+            s = settings(); s["tools"]["email_enabled"] = True
+            io.atomic_json(p / "Instructions/settings.json", s)
+            setup.validate_workspace(p)
+            source_file = p / "Runtime/main/email-alert-sources.json"
+            config = json.loads(source_file.read_text())
+            self.assertEqual(len(config["sources"]), 2)
+            self.assertTrue(all(not x["archive_after_processing"] for x in config["sources"]))
+            config["sources"][1]["gmail_query"] = 'newer_than:2d in:inbox -from:linkedin.com'
+            io.atomic_json(source_file, config)
+            with self.assertRaises(ValueError): setup.validate_workspace(p)
+            config["sources"][1]["gmail_query"] = 'in:inbox subject:"new jobs"'
+            io.atomic_json(source_file, config)
+            with self.assertRaises(ValueError): setup.validate_workspace(p)
 
 
 class RetrievalTests(unittest.TestCase):
