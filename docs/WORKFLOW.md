@@ -23,6 +23,35 @@ The public prompts preserve first-party verification, source-bound evidence, bou
 
 Configuration replaces personal evidence, titles, geography, compensation, domain priorities, resume labels, company rankings, inbox queries and permissions. These differences are intentional. No retired dedicated pivot bot, personal application workflow, cloud transport or production schedules are installed.
 
+## Created Workspace And Bot Outputs
+
+Initialization creates this structure inside the selected private folder automatically:
+
+```text
+Job Scout/
+  AGENTS.md
+  Instructions/          Stage instructions, settings, profile and rubric
+  Runtime/main/          Shared source configuration, queues and tracking
+  Leads/
+    Yes/                 Qualifying leads and promising unresolved manual checks
+    No/                  Scored nonmatches or hard-skill failures
+    WIP/                 Reserved for applications the user actually starts
+    .archive/            Hidden historical, closed, stale and duplicate records
+  .archive/run-receipts/  Hidden copies of superseded same-day run reports
+  tools/                 Installed retrieval and persistence helpers
+```
+
+The folders exist before the first scout run. Setup seeds source configuration and empty processing/role-tracking state; it does not generate pretend leads. Signals, run reports, checkpoints and retrieved evidence are created as the corresponding work happens. All stages use this same workspace and shared lock.
+
+| Stage | What it saves |
+| --- | --- |
+| 1. Email alerts | Signals, processed-message IDs and a run report in Runtime/main; no scored leads |
+| 2. Web discovery | Verified source/job actions in the shared queue and a run report; promising unresolved exact roles may get a Manual Check file in Leads/Yes |
+| 3. ATS | Full-JD lead files in Yes/No, source evidence, role/duplicate tracking, coverage and run reports |
+| 4. Indeed, if enabled | The same lead/tracking structure as ATS, plus its fallback coverage report and discovery actions |
+
+Yes uses the user's configured review threshold, subject to eligibility and evidence checks. Unscored manual checks are labeled explicitly. There is no Maybe queue. Scouts do not move a lead to WIP merely because it looks attractive, or infer that an application was submitted. Human-facing leads contain the full JD and a concise fit assessment; detailed calculations and diagnostics stay in run records. Startup does not create resumes, applications or unrelated employment records.
+
 ## Runtime Files
 
 - companies.json: public source configuration plus private user selection and local source history.
