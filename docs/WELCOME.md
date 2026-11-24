@@ -45,7 +45,7 @@ Choose useful companies from the starter list. Bots1–3 read job-alert emails, 
 
 ## 6. Review And Start Small
 
-Choose a private folder and timezone. Confirm your profile, constraints and rubric. Choose whether to enable email access and archive processed job alerts; archiving starts off.
+Choose a permanent folder on your computer, such as Documents/Employment/Job Scout, and a timezone. The agent checks access there before installing or scheduling anything. If access fails, resolve it in the app; setup must not silently switch folders. Confirm your profile, constraints and rubric, and choose email/archive permissions; archiving starts off.
 
 Your final setup summary should contain:
 

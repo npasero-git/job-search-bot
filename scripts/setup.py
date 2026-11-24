@@ -66,7 +66,10 @@ def validate_settings(s):
 
 
 def private_path(path):
-    path = Path(path).expanduser().resolve()
+    path = Path(path).expanduser()
+    if not path.is_absolute():
+        raise ValueError("Choose an absolute durable workspace path; relative paths depend on the agent's working folder")
+    path = path.resolve()
     if path == REPO or REPO in path.parents:
         raise ValueError("Private workspace must be outside the public checkout")
     return path

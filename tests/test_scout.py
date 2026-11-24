@@ -1,5 +1,7 @@
 import copy
 import json
+import shutil
+import subprocess
 from pathlib import Path
 import sys
 import tempfile
@@ -38,6 +40,31 @@ def breakdown():
 
 
 class SetupTests(unittest.TestCase):
+    def test_relative_destination_cannot_follow_agent_working_directory(self):
+        for path in ("workspace", ".", "../Employment/Job Scout"):
+            with self.assertRaises(ValueError): setup.private_path(path)
+
+    def test_downloaded_package_installs_independent_durable_workspace(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            package = root / "Downloads/job-search-bot"
+            shutil.copytree(setup.REPO, package, ignore=shutil.ignore_patterns(".git", "__pycache__"))
+            workspace = root / "Documents/Employment/Job Scout"
+            command = [sys.executable, str(package / "scripts/setup.py")]
+            subprocess.run(command + ["init", "--workspace", str(workspace)],
+                           cwd=package.parent, check=True, capture_output=True, text=True)
+            io.atomic_json(workspace / "Instructions/settings.json", settings())
+            subprocess.run(command + ["validate", "--workspace", str(workspace)],
+                           cwd=package.parent, check=True, capture_output=True, text=True)
+            self.assertFalse((package / "Runtime").exists())
+            for stage in (workspace / "Instructions").glob("SKILL-*.md"):
+                self.assertIn(str(workspace), stage.read_text())
+                self.assertNotIn("{{WORKSPACE}}", stage.read_text())
+            shutil.rmtree(package)  # Only the disposable test copy in Downloads.
+            subprocess.run([sys.executable, "-c", "import ats_fetch, scout_io"],
+                           cwd=workspace / "tools", check=True, capture_output=True, text=True)
+            self.assertTrue((workspace / "Runtime/main/role-ledger.json").exists())
+
     def test_missing_placeholders_fail(self):
         raw = json.loads((setup.REPO / "config/settings.example.json").read_text())
         with self.assertRaises(ValueError): setup.validate_settings(raw)

@@ -4,13 +4,15 @@ An agent-assisted job search: email alerts → web discovery → company job boa
 
 ## Start Here
 
-1. Download or clone this repository.
+1. Download and extract the repository ZIP, or clone it. You can start from Downloads.
 2. Open it in an agent with local file access and web tools, such as Codex or Claude Cowork. Python3.10+ is required. An ordinary chat without file access cannot complete setup.
 3. Paste this prompt:
 
-> Walk me through docs/WELCOME.md. Start with my needs and experience, keep it brief, and help me customize the starting rubric. Create and validate my private workspace, give me copy-ready LinkedIn searches and email-alert instructions, and show me a synthetic example before live searches. Ask before scheduling tasks or archiving email.
+> Read AGENTS.md, then walk me through docs/WELCOME.md. Keep it brief and help me customize the starting rubric. Set up a permanent folder on my computer, validate access, give me LinkedIn searches and alert instructions, and show me an example before live searches. Ask before scheduling tasks or archiving email.
 
 **Start with the wizard; no manual configuration is needed beforehand.** The agent gathers your answers and creates the configuration. You authorize service connections, enable LinkedIn alerts, review a small trial run, and then approve scheduling.
+
+Downloads is the starting package, not the permanent workspace. Choose a folder such as `Documents/Employment/Job Scout`; the agent must verify access there rather than silently using an app-owned or temporary folder.
 
 Indeed is optional and supported only through Claude's search/full-job-detail connector in this release. The ChatGPT Indeed app isn't a supported replacement; use bots1–3 in ChatGPT/Codex where their tools are available.
 
