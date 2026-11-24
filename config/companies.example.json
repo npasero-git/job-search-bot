@@ -1,191 +1,3664 @@
-{
-  "version": 2,
-  "_comment": "Example single source of truth for job-scout targets. Replace examples with your own companies. The ATS examples reflect real provider patterns used by SKILL-ats.md.",
-  "companies": [
-    {
-      "name": "Greenhouse Example",
-      "tier": "1",
-      "category": "curated",
-      "source": "curated",
-      "source_status": "active",
-      "indeed_keywords": ["Greenhouse Example Product Manager"],
-      "ats": [
-        {
-          "provider": "greenhouse",
-          "slug": "greenhouse-board-slug"
-        }
-      ],
-      "search_mode": "full",
-      "surface_count": 0,
-      "last_surfaced_on": null,
-      "note": "Greenhouse uses boards-api.greenhouse.io/v1/boards/{slug}/jobs?content=true."
-    },
-    {
-      "name": "Ashby Example",
-      "tier": "1",
-      "category": "curated",
-      "source": "curated",
-      "source_status": "active",
-      "indeed_keywords": ["Ashby Example Product Manager"],
-      "ats": [
-        {
-          "provider": "ashby",
-          "slug": "ashby-board-slug"
-        }
-      ],
-      "search_mode": "full",
-      "surface_count": 0,
-      "last_surfaced_on": null,
-      "note": "Ashby uses api.ashbyhq.com/posting-api/job-board/{slug}. Do not append includeCompensation=true; some tenants reject it."
-    },
-    {
-      "name": "Lever Example",
-      "tier": "2",
-      "category": "curated",
-      "source": "curated",
-      "source_status": "active",
-      "indeed_keywords": ["Lever Example Product Manager"],
-      "ats": [
-        {
-          "provider": "lever",
-          "slug": "lever-company-slug"
-        }
-      ],
-      "search_mode": "full",
-      "surface_count": 0,
-      "last_surfaced_on": null,
-      "note": "Lever uses api.lever.co/v0/postings/{slug}?mode=json."
-    },
-    {
-      "name": "iCIMS JSON API Example",
-      "tier": "2",
-      "category": "curated",
-      "source": "curated",
-      "source_status": "active",
-      "indeed_keywords": ["iCIMS JSON Example Product Manager"],
-      "ats": [
-        {
-          "provider": "icims",
-          "endpoint": "https://careers.example.com/api/jobs?page={page}&limit=100",
-          "type": "json_api",
-          "fetch_method": "bash_curl"
-        }
-      ],
-      "search_mode": "full",
-      "surface_count": 0,
-      "last_surfaced_on": null,
-      "note": "Large iCIMS-style JSON API. Full JDs may already be in the API response. Use bash_curl when web_fetch truncates large JSON."
-    },
-    {
-      "name": "iCIMS HTML Category Example",
-      "tier": "2",
-      "category": "curated",
-      "source": "curated",
-      "source_status": "active",
-      "indeed_keywords": [],
-      "indeed_broken": true,
-      "ats": [
-        {
-          "provider": "icims",
-          "endpoint": "https://careers.example.com/search-jobs?category-filter=PRODUCT_MANAGEMENT",
-          "type": "html_category",
-          "fetch_method": "web_fetch",
-          "drill_in_base": "https://careers.example.com"
-        }
-      ],
-      "search_mode": "full",
-      "surface_count": 0,
-      "last_surfaced_on": null,
-      "note": "iCIMS-style HTML category page. Parse list-page job links, then drill into each job page for full JD. indeed_broken=true is appropriate when the company name is too generic for reliable Indeed coverage."
-    },
-    {
-      "name": "Example Signal-Only Discovery",
-      "tier": "3",
-      "category": "signal-only",
-      "source": "linkedin_discovery",
-      "source_status": "signal_only",
-      "search_mode": "signal_only",
-      "discovery_priority": "medium",
-      "linkedin_mention_count": 1,
-      "indeed_keywords": [],
-      "ats": [],
-      "added_on": "YYYY-MM-DD",
-      "surface_count": 0,
-      "last_surfaced_on": null,
-      "note": "Example of a signal-only company. LinkedIn writes urgent stubs only; web-discovery verifies first-party sources before creating DISCOVERY-ACTIONS entries or recurring company coverage."
-    },
-    {
-      "name": "Example Verified Discovery",
-      "tier": "3",
-      "category": "web-discovery",
-      "source": "web_discovery",
-      "source_status": "probation",
-      "source_status_since": "YYYY-MM-DD",
-      "probation_attempts": 0,
-      "indeed_keywords": ["Example Verified Discovery Product Manager"],
-      "ats": [
-        {
-          "provider": "greenhouse",
-          "slug": "verified-greenhouse-slug"
-        }
-      ],
-      "search_mode": "full",
-      "surface_count": 0,
-      "last_surfaced_on": null,
-      "note": "Example of a first-party source verified by web-discovery and activated by ATS on probation."
-    }
-  ],
-  "indeed_config": {
-    "pass_2_pm_anchored": {
-      "keywords": [
-        "Product Manager target-lane-keyword",
-        "Product Manager adjacent-lane-keyword"
-      ],
-      "us_locations": [
-        "Target State",
-        "Target Metro",
-        "Remote"
-      ]
-    }
+[
+  {
+    "name": "Adobe",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "workday",
+        "host": "adobe.wd5.myworkdayjobs.com",
+        "tenant": "adobe",
+        "site": "external_experienced"
+      }
+    ],
+    "indeed_keywords": [
+      "Adobe Product Manager"
+    ],
+    "search_mode": "full"
   },
-  "slug_invalid_history": [],
-  "ats_endpoints": {
-    "greenhouse": {
-      "endpoint_template": "https://boards-api.greenhouse.io/v1/boards/{slug}/jobs?content=true",
-      "method": "GET",
-      "fetcher": "web_fetch"
-    },
-    "ashby": {
-      "endpoint_template": "https://api.ashbyhq.com/posting-api/job-board/{slug}",
-      "method": "GET",
-      "fetcher": "web_fetch",
-      "_comment": "Do not append includeCompensation=true by default; some tenants reject it. Parse compensation from descriptionHtml when structured compensation is absent."
-    },
-    "lever": {
-      "endpoint_template": "https://api.lever.co/v0/postings/{slug}?mode=json",
-      "method": "GET",
-      "fetcher": "web_fetch"
-    },
-    "workday": {
-      "search_endpoint_template": "https://{host}/wday/cxs/{tenant}/{site}/jobs",
-      "search_method": "POST",
-      "search_body_template": {
-        "appliedFacets": {},
-        "limit": 20,
-        "offset": 0,
-        "searchText": "{search_text}"
+  {
+    "name": "albelli",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "albelli Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Amazon",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Amazon Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "AMD",
+    "category": "Semiconductor",
+    "ats": [
+      {
+        "provider": "icims",
+        "endpoint": "https://careers.amd.com/api/jobs?page={page}&limit=100",
+        "type": "json_api",
+        "fetch_method": "bash_curl",
+        "note": "GET paginated JSON with page and limit=100; no keywords/internal filters. Read jobs[].data title, req_id, city/state, posted_date, tags2/tags3 and full description. Check totalCount, distinct IDs and termination; never infer date order. Public listing https://careers.amd.com/careers-home/jobs/{req_id}; canonical icims:amd:{req_id}."
+      }
+    ],
+    "indeed_keywords": [
+      "AMD Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Amplitude",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "amplitude"
+      }
+    ],
+    "indeed_keywords": [
+      "Amplitude Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Anthropic",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "anthropic"
+      }
+    ],
+    "indeed_keywords": [
+      "Anthropic Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Apple",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Apple Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Applied Intuition",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "applied"
+      }
+    ],
+    "indeed_keywords": [
+      "Applied Intuition Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Arm",
+    "category": "Semiconductor",
+    "ats": [
+      {
+        "provider": "icims",
+        "endpoint": "https://careers.arm.com/search-jobs?acm=8088224&alrpm=ALL&ascf=[{\"Key\":\"ALL\",\"Value\":null}]",
+        "type": "html_category",
+        "fetch_method": "bash_curl_globoff",
+        "drill_in_base": "https://careers.arm.com",
+        "note": "GET category HTML with curl globbing disabled. Parse all public /job/ links and reconcile category count/pagination. Drill each survivor: meta-dimension19 date, meta-dimension7 location, meta-job-ats-req-id identity and full JD body. Use public careers.arm.com listing, not login. Canonical icims:arm:{req_id}."
+      }
+    ],
+    "indeed_keywords": [
+      "Arm Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Articul8",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "articul8"
+      }
+    ],
+    "indeed_keywords": [
+      "Articul8 Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Atlassian",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Atlassian Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Aurora Innovation",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Aurora Innovation Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Autodesk",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Autodesk Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Avant",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Avant Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Baseten",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "baseten"
+      }
+    ],
+    "indeed_keywords": [
+      "Baseten Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Benchstack AI",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Benchstack AI Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Bloomberg",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Bloomberg Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Blue River Technology",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Blue River Technology Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Booking.com",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Booking.com Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "BrightAI",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "brightai"
+      }
+    ],
+    "indeed_keywords": [
+      "BrightAI Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Broadcom",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "workday",
+        "host": "broadcom.wd1.myworkdayjobs.com",
+        "tenant": "broadcom",
+        "site": "External_Career",
+        "pagination_max_pages": 3
+      }
+    ],
+    "indeed_keywords": [
+      "Broadcom Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Bullish",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Bullish Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "bunq",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "bunq Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "C3 AI",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "c3iot"
+      }
+    ],
+    "indeed_keywords": [
+      "C3 AI Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Cadence",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Cadence Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Cerebras",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "cerebras"
+      }
+    ],
+    "indeed_keywords": [
+      "Cerebras Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Character.AI",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Character.AI Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Charles Schwab",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Charles Schwab Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Cleo",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Cleo Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Code Metal",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "code-metal"
+      }
+    ],
+    "indeed_keywords": [
+      "Code Metal Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Cohere",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "cohere"
+      }
+    ],
+    "indeed_keywords": [
+      "Cohere Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Cohesity",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Cohesity Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "CoreWeave",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "coreweave"
+      }
+    ],
+    "indeed_keywords": [
+      "CoreWeave Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Cruise",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Cruise Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Crusoe",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "Crusoe"
+      }
+    ],
+    "indeed_keywords": [
+      "Crusoe Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Cursor",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "cursor"
+      }
+    ],
+    "indeed_keywords": [
+      "Cursor Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "D.E. Shaw Group",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "D.E. Shaw Group Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Databricks",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "databricks"
+      }
+    ],
+    "indeed_keywords": [
+      "Databricks Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Datadog",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "datadog"
+      }
+    ],
+    "indeed_keywords": [
+      "Datadog Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Decagon",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "decagon"
+      }
+    ],
+    "indeed_keywords": [
+      "Decagon Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Dell Technologies",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "custom",
+        "endpoint": "https://enterpriseplatform.dell.com/hcmRestApi/resources/latest/recruitingCEJobRequisitions?onlyData=true&expand=requisitionList.secondaryLocations&finder=findReqs%3BsiteNumber%3DCX_1001%2Climit%3D100%2Coffset%3D{offset}%2CsortBy%3DPOSTING_DATES_DESC",
+        "type": "json_listing",
+        "fetch_method": "bash_curl",
+        "drill_in_base": "https://enterpriseplatform.dell.com/hcmRestApi/resources/latest/recruitingCEJobRequisitionDetails/{job_id}?onlyData=true",
+        "note": "Oracle CX_1001: limit/offset belong inside finder. Read items[0].requisitionList, TotalJobsCount, Offset. Require returned offset, consistent counts and distinct Id; advance by returned count. Map Title, PrimaryLocation/secondaryLocations and PostedDate. Detail endpoint substitutes {job_id}; require matching Id and full ExternalDescriptionStr, ExternalResponsibilitiesStr, ExternalQualificationsStr. Prefer ExternalPostedStartDate. Listing https://enterpriseplatform.dell.com/hcmUI/CandidateExperience/en/sites/careers/job/{job_id}; canonical oracle:dell:{Id}."
+      }
+    ],
+    "indeed_keywords": [
+      "Dell Technologies Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Dexmate",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "dexmate"
+      }
+    ],
+    "indeed_keywords": [
+      "Dexmate Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Dialpad",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "dialpad"
+      }
+    ],
+    "indeed_keywords": [
+      "Dialpad Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Docusign",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Docusign Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "EDB",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "EDB Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Effective AI",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Effective AI Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Elastic",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Elastic Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Faros",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Faros Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Figma",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "figma"
+      }
+    ],
+    "indeed_keywords": [
+      "Figma Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Fivetran",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Fivetran Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Fluidstack",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "fluidstack"
+      }
+    ],
+    "indeed_keywords": [
+      "Fluidstack Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Fourthline",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Fourthline Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Fujitsu",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Fujitsu Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "General Motors",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "workday",
+        "host": "generalmotors.wd5.myworkdayjobs.com",
+        "tenant": "generalmotors",
+        "site": "Careers_GM"
+      }
+    ],
+    "indeed_keywords": [
+      "General Motors Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "GitLab",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "gitlab"
+      }
+    ],
+    "indeed_keywords": [
+      "GitLab Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Glean",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "gleanwork"
+      }
+    ],
+    "indeed_keywords": [
+      "Glean Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Google",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Google Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Google DeepMind",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Google DeepMind Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Granica",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "granica"
+      }
+    ],
+    "indeed_keywords": [
+      "Granica Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Groq",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Groq Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Harvey",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "harvey"
+      }
+    ],
+    "indeed_keywords": [
+      "Harvey Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Hearth",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Hearth Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Hewlett Packard Enterprise",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "workday",
+        "host": "hpe.wd5.myworkdayjobs.com",
+        "tenant": "hpe",
+        "site": "ACJobSite"
+      }
+    ],
+    "indeed_keywords": [
+      "Hewlett Packard Enterprise Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Hitachi Vantara",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Hitachi Vantara Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "HiveWatch",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "HiveWatch Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Hopper",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Hopper Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Hostaway",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Hostaway Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Hyarchis",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Hyarchis Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "IBM",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "IBM Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Inflection AI",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Inflection AI Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Instacart",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Instacart Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Intel",
+    "category": "Semiconductor",
+    "ats": [
+      {
+        "provider": "workday",
+        "host": "intel.wd1.myworkdayjobs.com",
+        "tenant": "intel",
+        "site": "External",
+        "pagination_max_pages": 3
+      }
+    ],
+    "indeed_keywords": [
+      "Intel Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Intuit",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Intuit Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Jack & Jill",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Jack & Jill Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Jerry",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "Jerry.ai"
+      }
+    ],
+    "indeed_keywords": [
+      "Jerry Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "JetBrains",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "JetBrains Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Joblet-AI",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Joblet-AI Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Kodiak Robotics",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "kodiak"
+      }
+    ],
+    "indeed_keywords": [
+      "Kodiak Robotics Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Ladders",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Ladders Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Lambda",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "Lambda"
+      }
+    ],
+    "indeed_keywords": [
+      "Lambda Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "LangChain",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "langchain"
+      }
+    ],
+    "indeed_keywords": [
+      "LangChain Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Lazard",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Lazard Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Lightning AI",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "lightningai"
+      }
+    ],
+    "indeed_keywords": [
+      "Lightning AI Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Lovable",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "lovable"
+      }
+    ],
+    "indeed_keywords": [
+      "Lovable Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Luma",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Luma Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "MarvelX AI",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "MarvelX AI Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Maven",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Maven Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Meta",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Meta Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Microsoft",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Microsoft Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "MinIO",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "minio"
+      }
+    ],
+    "indeed_keywords": [
+      "MinIO Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Mirantis",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Mirantis Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Mistral",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Mistral Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Mixpanel",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "mixpanel"
+      }
+    ],
+    "indeed_keywords": [
+      "Mixpanel Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Mobileye",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Mobileye Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Momentive Software",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Momentive Software Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "NetApp",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "NetApp Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Netflix",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Netflix Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Nexthop AI",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Nexthop AI Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Nooks",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "nooks"
+      }
+    ],
+    "indeed_keywords": [
+      "Nooks Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Notion",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Notion Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Nscale",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "nscaleoperationsukltd"
+      }
+    ],
+    "indeed_keywords": [
+      "Nscale Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Nuro",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "nuro"
+      }
+    ],
+    "indeed_keywords": [
+      "Nuro Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Nike",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "workday",
+        "host": "nike.wd1.myworkdayjobs.com",
+        "tenant": "nike",
+        "site": "nke"
+      }
+    ],
+    "indeed_keywords": [
+      "Nike Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Nutanix",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Nutanix Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "NVIDIA",
+    "category": "Semiconductor",
+    "ats": [
+      {
+        "provider": "workday",
+        "host": "nvidia.wd5.myworkdayjobs.com",
+        "tenant": "nvidia",
+        "site": "NVIDIAExternalCareerSite",
+        "pagination_max_pages": 3
+      }
+    ],
+    "indeed_keywords": [
+      "NVIDIA Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "NVIDIA AI",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "NVIDIA AI Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Ocho",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Ocho Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "OpenAI",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "openai"
+      }
+    ],
+    "indeed_keywords": [
+      "OpenAI Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Otter",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Otter Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "PayPal",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "PayPal Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Pendo",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Pendo Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Perplexity",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "perplexity"
+      }
+    ],
+    "indeed_keywords": [
+      "Perplexity Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Physical Intelligence",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "physicalintelligence"
+      }
+    ],
+    "indeed_keywords": [
+      "Physical Intelligence Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Prophet",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Prophet Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Qualcomm",
+    "category": "Semiconductor",
+    "ats": [
+      {
+        "provider": "custom",
+        "endpoint": "https://careers.qualcomm.com/api/pcsx/search?domain=qualcomm.com&filter_job_family=product%20management&start={start}",
+        "type": "json_api",
+        "fetch_method": "bash_curl",
+        "drill_in_base": "https://careers.qualcomm.com/api/pcsx/position_details?position_id={position_id}&domain=qualcomm.com",
+        "note": "Eightfold: confirm data.appliedFilters.jobFamily contains product management. Read data.positions/data.count, advance start by returned count, verify unique id and end/count. Map name, locations, postedTs, displayJobId and positionUrl. Detail data.id/displayJobId must match; full JD data.jobDescription. Canonical qualcomm:{displayJobId}."
+      }
+    ],
+    "indeed_keywords": [
+      "Qualcomm Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Radical AI",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Radical AI Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Reddit, Inc.",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Reddit, Inc. Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Reforge",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Reforge Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Replit",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "replit"
+      }
+    ],
+    "indeed_keywords": [
+      "Replit Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "RevenueCat",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "revenuecat"
+      }
+    ],
+    "indeed_keywords": [
+      "RevenueCat Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Roblox",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "roblox"
+      }
+    ],
+    "indeed_keywords": [
+      "Roblox Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Runpod",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "runpod"
+      }
+    ],
+    "indeed_keywords": [
+      "Runpod Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Salesforce",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "workday",
+        "host": "salesforce.wd12.myworkdayjobs.com",
+        "tenant": "salesforce",
+        "site": "External_Career_Site"
+      }
+    ],
+    "indeed_keywords": [
+      "Salesforce Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "SambaNova",
+    "category": "Semiconductor",
+    "ats": [],
+    "indeed_keywords": [
+      "SambaNova Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "SAP",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "SAP Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Saronic",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "saronic"
+      }
+    ],
+    "indeed_keywords": [
+      "Saronic Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Scale AI",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "scaleai"
+      }
+    ],
+    "indeed_keywords": [
+      "Scale AI Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Shamrock AI",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Shamrock AI Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Shield AI",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "lever",
+        "slug": "shieldai"
+      }
+    ],
+    "indeed_keywords": [
+      "Shield AI Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Simular",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Simular Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Skild AI",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Skild AI Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Skydio",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "skydio"
+      }
+    ],
+    "indeed_keywords": [
+      "Skydio Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Smartsheet",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Smartsheet Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Snowflake",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Snowflake Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Storio group",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Storio group Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Stripe",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "stripe"
+      }
+    ],
+    "indeed_keywords": [
+      "Stripe Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Studocu",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Studocu Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Superhuman",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Superhuman Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Supermicro",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "custom",
+        "endpoint": "https://jobs.supermicro.com/go/Product-Manager/4291300/{offset}/?q=&sortColumn=referencedate&sortDirection=desc",
+        "type": "html_listing",
+        "fetch_method": "bash_curl",
+        "drill_in_base": "https://jobs.supermicro.com",
+        "note": "SuccessFactors category: offsets 0,25,...; verify declared result windows/total and distinct IDs. Parse tr.data-row, span.jobShifttype req ID, a.jobTitle-link detail href, row location. Detail h1#job-title, meta[itemprop=datePosted], p#job-date, p#job-location .jobGeoLocation, span[itemprop=description].jobdescription. Verify embedded Job Req ID. Missing/repeated pages, changed counts or sparse details are incomplete, not zero results."
+      }
+    ],
+    "indeed_keywords": [
+      "Supermicro Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "SurveyMonkey",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "SurveyMonkey Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Tesla Autopilot",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Tesla Autopilot Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "TikTok",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "TikTok Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Together AI",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "togetherai"
+      }
+    ],
+    "indeed_keywords": [
+      "Together AI Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Traba",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "traba"
+      }
+    ],
+    "indeed_keywords": [
+      "Traba Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Typeface",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Typeface Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Uber",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Uber Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Unframe",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Unframe Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Viktor",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Viktor Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Vultr",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "Vultr"
+      }
+    ],
+    "indeed_keywords": [
+      "Vultr Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Waymo",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "waymo"
+      }
+    ],
+    "indeed_keywords": [
+      "Waymo Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Wayve",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "wayve"
+      }
+    ],
+    "indeed_keywords": [
+      "Wayve Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "WeRide",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "WeRide Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Workiva",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Workiva Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "WP Engine",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "WP Engine Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Writer",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Writer Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "X, The Moonshot Factory",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "X, The Moonshot Factory Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "xAI",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "xai"
+      }
+    ],
+    "indeed_keywords": [
+      "xAI Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Yahoo",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Yahoo Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "You.com",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "You.com Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Zapier",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Zapier Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Zillow",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Zillow Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Zip",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Zip Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Zoox",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "lever",
+        "slug": "zoox"
+      }
+    ],
+    "indeed_keywords": [
+      "Zoox Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Fermi AI",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Fermi AI Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Tremendous",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "Tremendous"
+      }
+    ],
+    "indeed_keywords": [
+      "Tremendous Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Webflow",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "webflow"
+      }
+    ],
+    "indeed_keywords": [
+      "Webflow Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Anduril Industries",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "andurilindustries"
+      }
+    ],
+    "indeed_keywords": [
+      "Anduril Industries Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Fireworks AI",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "fireworks"
+      }
+    ],
+    "indeed_keywords": [
+      "Fireworks AI Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Torc Robotics",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "torcrobotics"
+      }
+    ],
+    "indeed_keywords": [
+      "Torc Robotics Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Crusoe Energy",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "Crusoe"
+      }
+    ],
+    "indeed_keywords": [
+      "Crusoe Energy Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Hammerhead AI",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "hammerhead-ai"
+      }
+    ],
+    "indeed_keywords": [
+      "Hammerhead AI Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Web AI",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "webai"
+      }
+    ],
+    "indeed_keywords": [
+      "Web AI Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "LiveKit",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "livekit"
+      }
+    ],
+    "indeed_keywords": [
+      "LiveKit Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Liquid AI",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "liquid-ai"
+      }
+    ],
+    "indeed_keywords": [
+      "Liquid AI Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Menlo",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "menlo"
+      }
+    ],
+    "indeed_keywords": [
+      "Menlo Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Efficient Computer",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "efficientcomputer"
+      }
+    ],
+    "indeed_keywords": [
+      "Efficient Computer Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Armada",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "armada"
+      }
+    ],
+    "indeed_keywords": [
+      "Armada Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "IFS",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "custom",
+        "endpoint": "https://api.smartrecruiters.com/v1/companies/IFS1/postings?limit=100&offset={offset}",
+        "type": "json_listing",
+        "fetch_method": "bash_curl",
+        "drill_in_base": "https://api.smartrecruiters.com/v1/companies/IFS1/postings/{job_id}",
+        "note": "SmartRecruiters: read content[], totalFound, offset and limit. Advance by returned count until total reached; require distinct id and stable counts. Row name, location, releasedDate, ref. Detail requires matching id, active=true, visibility=PUBLIC; full JD jobAd.sections companyDescription/jobDescription/qualifications/additionalInformation.text. Public listing postingUrl. No activation based on an inaccessible endpoint."
+      }
+    ],
+    "indeed_keywords": [
+      "IFS Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Vast.ai",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "vastai"
+      }
+    ],
+    "indeed_keywords": [
+      "Vast.ai Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "C3.ai",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "c3iot"
+      }
+    ],
+    "indeed_keywords": [
+      "C3.ai Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Emerald AI",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "emerald-ai"
+      }
+    ],
+    "indeed_keywords": [
+      "Emerald AI Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "interface.ai",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "interface-ai"
+      }
+    ],
+    "indeed_keywords": [
+      "interface.ai Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Waabi",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "lever",
+        "slug": "waabi"
+      }
+    ],
+    "indeed_keywords": [
+      "Waabi Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "RadixArk",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "radixark"
+      }
+    ],
+    "indeed_keywords": [
+      "RadixArk Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Sigma Computing",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "sigmacomputing"
+      }
+    ],
+    "indeed_keywords": [
+      "Sigma Computing Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Volta",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "volta"
+      }
+    ],
+    "indeed_keywords": [
+      "Volta Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Docker",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "docker"
+      }
+    ],
+    "indeed_keywords": [
+      "Docker Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Inferact",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "inferact"
+      }
+    ],
+    "indeed_keywords": [
+      "Inferact Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "onX Maps",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "onxmaps"
+      }
+    ],
+    "indeed_keywords": [
+      "onX Maps Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Apollo.io",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "apolloio"
+      }
+    ],
+    "indeed_keywords": [
+      "Apollo.io Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Deepgram",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "deepgram"
+      }
+    ],
+    "indeed_keywords": [
+      "Deepgram Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Reflection AI",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "reflectionai"
+      }
+    ],
+    "indeed_keywords": [
+      "Reflection AI Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "CloudZero",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "CloudZero"
+      }
+    ],
+    "indeed_keywords": [
+      "CloudZero Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Sereact",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "sereact"
+      }
+    ],
+    "indeed_keywords": [
+      "Sereact Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Snorkel AI",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "snorkelai"
+      }
+    ],
+    "indeed_keywords": [
+      "Snorkel AI Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Glydways",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "glydways"
+      }
+    ],
+    "indeed_keywords": [
+      "Glydways Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "AeroVect",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "AeroVect"
+      }
+    ],
+    "indeed_keywords": [
+      "AeroVect Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Nebius",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "nebius"
+      }
+    ],
+    "indeed_keywords": [
+      "Nebius Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Apptronik",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "apptronik"
+      }
+    ],
+    "indeed_keywords": [
+      "Apptronik Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "DoorDash",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "doordashusa"
+      }
+    ],
+    "indeed_keywords": [
+      "DoorDash Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Modal Labs",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "modal"
+      }
+    ],
+    "indeed_keywords": [
+      "Modal Labs Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "SF Compute",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "sfcompute"
+      }
+    ],
+    "indeed_keywords": [
+      "SF Compute Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Anyscale",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "anyscale"
+      }
+    ],
+    "indeed_keywords": [
+      "Anyscale Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "fal.ai",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "fal-ai"
+      }
+    ],
+    "indeed_keywords": [
+      "fal.ai Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Lightmatter",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "lightmatter"
+      }
+    ],
+    "indeed_keywords": [
+      "Lightmatter Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Figure AI",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "figureai"
+      }
+    ],
+    "indeed_keywords": [
+      "Figure AI Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "1X Technologies",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "1x"
+      }
+    ],
+    "indeed_keywords": [
+      "1X Technologies Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Gecko Robotics",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "gecko-robotics"
+      }
+    ],
+    "indeed_keywords": [
+      "Gecko Robotics Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "May Mobility",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "maymobility"
+      }
+    ],
+    "indeed_keywords": [
+      "May Mobility Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Outrider",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "outrider"
+      }
+    ],
+    "indeed_keywords": [
+      "Outrider Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Foxglove",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "foxglove"
+      }
+    ],
+    "indeed_keywords": [
+      "Foxglove Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Pure Storage",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "purestorage"
+      }
+    ],
+    "indeed_keywords": [
+      "Pure Storage Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Kamiwaza AI",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "kamiwaza"
+      }
+    ],
+    "indeed_keywords": [
+      "Kamiwaza AI Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Canonical",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "canonical"
+      }
+    ],
+    "indeed_keywords": [
+      "Canonical Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Serve Robotics",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "serverobotics"
+      }
+    ],
+    "indeed_keywords": [
+      "Serve Robotics Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Diligent Robotics",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "diligentrobotics"
+      }
+    ],
+    "indeed_keywords": [
+      "Diligent Robotics Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Encord",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "encord"
+      }
+    ],
+    "indeed_keywords": [
+      "Encord Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Mind Robotics",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "mindrobotics"
+      }
+    ],
+    "indeed_keywords": [
+      "Mind Robotics Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "UnitX Labs",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "unitxlabs"
+      }
+    ],
+    "indeed_keywords": [
+      "UnitX Labs Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Sunrise Robotics",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "sunrise"
+      }
+    ],
+    "indeed_keywords": [
+      "Sunrise Robotics Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "n8n",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "n8n"
+      }
+    ],
+    "indeed_keywords": [
+      "n8n Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Alluxio",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "lever",
+        "slug": "alluxio"
+      }
+    ],
+    "indeed_keywords": [
+      "Alluxio Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Netlify",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "netlify"
+      }
+    ],
+    "indeed_keywords": [
+      "Netlify Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Okta",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "okta"
+      }
+    ],
+    "indeed_keywords": [
+      "Okta Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Tenstorrent",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "tenstorrent"
+      }
+    ],
+    "indeed_keywords": [
+      "Tenstorrent Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Ahead Computing",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "custom",
+        "endpoint": "https://www.aheadcomputing.com/careers",
+        "type": "html_listing",
+        "fetch_method": "web_fetch",
+        "drill_in_base": "https://www.aheadcomputing.com",
+        "job_path_prefix": "/career/",
+        "note": "Parse public /career/ detail links and complete descriptions. Verify enumeration against page structure/count; if not established, retain exact-role evidence and label board coverage incomplete."
+      }
+    ],
+    "indeed_keywords": [
+      "Ahead Computing Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Asana",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "Asana"
+      }
+    ],
+    "indeed_keywords": [
+      "Asana Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "ZoomInfo",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "zoominfo"
+      }
+    ],
+    "indeed_keywords": [
+      "ZoomInfo Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Graphcore",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "graphcore"
+      }
+    ],
+    "indeed_keywords": [
+      "Graphcore Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Prophecy",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "prophecysimpledatalabs"
+      }
+    ],
+    "indeed_keywords": [
+      "Prophecy Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "LiquidStack",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "liquidstack"
+      }
+    ],
+    "indeed_keywords": [
+      "LiquidStack Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Parallel Domain",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "lever",
+        "slug": "paralleldomain"
+      }
+    ],
+    "indeed_keywords": [
+      "Parallel Domain Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "ANYbotics",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "lever",
+        "slug": "anybotics"
+      }
+    ],
+    "indeed_keywords": [
+      "ANYbotics Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Humble Robotics",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "lever",
+        "slug": "humble-robotics"
+      }
+    ],
+    "indeed_keywords": [
+      "Humble Robotics Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Field AI",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "lever",
+        "slug": "field-ai"
+      }
+    ],
+    "indeed_keywords": [
+      "Field AI Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Bedrock Robotics",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "bedrock-robotics"
+      }
+    ],
+    "indeed_keywords": [
+      "Bedrock Robotics Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Atoms",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "cssmerge",
+        "active": true
       },
-      "search_text_variants": [
-        "Product Manager",
-        "Senior Product Manager",
-        "AI Product Manager"
-      ],
-      "fetcher": "bash_curl",
-      "required_headers": {
-        "Cache-Control": "no-cache, no-store",
-        "Pragma": "no-cache"
-      },
-      "_comment": "Use curl subprocess with no-cache headers. Run Workday before Greenhouse to reduce stale proxy-cache responses. Keep limit at 20; some Workday tenants reject larger values."
-    }
+      {
+        "provider": "greenhouse",
+        "slug": "atoms",
+        "active": false
+      }
+    ],
+    "indeed_keywords": [
+      "Atoms Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Thinking Machines Lab",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "ThinkingMachines"
+      }
+    ],
+    "indeed_keywords": [
+      "Thinking Machines Lab Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Taara",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "taaraconnect"
+      }
+    ],
+    "indeed_keywords": [
+      "Taara Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Meter",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "meter"
+      }
+    ],
+    "indeed_keywords": [
+      "Meter Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "vCluster Labs",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "vclusterlabs"
+      }
+    ],
+    "indeed_keywords": [
+      "vCluster Labs Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Chalk",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "chalk"
+      }
+    ],
+    "indeed_keywords": [
+      "Chalk Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Benchling",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "benchling"
+      }
+    ],
+    "indeed_keywords": [
+      "Benchling Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Zum",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "lever",
+        "slug": "ridezum"
+      }
+    ],
+    "indeed_keywords": [
+      "Zum Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Factory",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "factory"
+      }
+    ],
+    "indeed_keywords": [
+      "Factory Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Motive",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "gomotive"
+      }
+    ],
+    "indeed_keywords": [
+      "Motive Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Astera Labs",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "asteralabs"
+      }
+    ],
+    "indeed_keywords": [
+      "Astera Labs Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Dyna Robotics",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "dyna-robotics"
+      }
+    ],
+    "indeed_keywords": [
+      "Dyna Robotics Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Tessera Labs",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "tessera-labs"
+      }
+    ],
+    "indeed_keywords": [
+      "Tessera Labs Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Phaidra",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "phaidra"
+      }
+    ],
+    "indeed_keywords": [
+      "Phaidra Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Quindar",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "quindar"
+      }
+    ],
+    "indeed_keywords": [
+      "Quindar Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "GitHub",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "custom",
+        "type": "html_listing",
+        "base_url": "https://www.github.careers/careers-home/jobs",
+        "job_path_prefix": "/careers-home/jobs/",
+        "note": "Public careers HTML; use base_url and job_path_prefix. No verified full-board extraction contract: manual/exact verification only until enumeration and complete details are established."
+      }
+    ],
+    "indeed_keywords": [
+      "GitHub Product Manager"
+    ],
+    "search_mode": "manual_watch"
+  },
+  {
+    "name": "Center for AI Safety",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "centerforartificialintelligencesafetyinc"
+      }
+    ],
+    "indeed_keywords": [
+      "Center for AI Safety Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Ridgeline",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "ridgeline"
+      }
+    ],
+    "indeed_keywords": [
+      "Ridgeline Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "David AI",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "david-ai"
+      }
+    ],
+    "indeed_keywords": [
+      "David AI Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Striveworks",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "striveworks"
+      }
+    ],
+    "indeed_keywords": [
+      "Striveworks Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Hadrian Automation",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "hadrian-automation"
+      }
+    ],
+    "indeed_keywords": [
+      "Hadrian Automation Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Marvell",
+    "category": "Semiconductor",
+    "ats": [
+      {
+        "provider": "workday",
+        "host": "marvell.wd1.myworkdayjobs.com",
+        "tenant": "marvell",
+        "site": "MarvellCareers"
+      }
+    ],
+    "indeed_keywords": [
+      "Marvell Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Micron",
+    "category": "Semiconductor",
+    "ats": [
+      {
+        "provider": "workday",
+        "host": "micron.wd1.myworkdayjobs.com",
+        "tenant": "micron",
+        "site": "External"
+      }
+    ],
+    "indeed_keywords": [
+      "Micron Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Synopsys",
+    "category": "Semiconductor",
+    "ats": [
+      {
+        "provider": "custom",
+        "endpoint": "https://careers.synopsys.com/category/product-management-jobs/44408/8738496/1",
+        "type": "html_listing",
+        "fetch_method": "web_fetch",
+        "drill_in_base": "https://careers.synopsys.com",
+        "note": "Parse category job links, title, location, posted date and Job ID. Require declared count to equal distinct links or follow verified pagination. Detail h1 title, Job ID, date, salary/location and full role sections. Scope is Product Management category, not every department."
+      }
+    ],
+    "indeed_keywords": [
+      "Synopsys Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Teradyne",
+    "category": "Semiconductor",
+    "ats": [
+      {
+        "provider": "custom",
+        "endpoint": "https://jobs.teradyne.com/search/?q=&sortColumn=referencedate&sortDirection=desc&startrow={startrow}",
+        "type": "html_listing",
+        "fetch_method": "web_fetch",
+        "drill_in_base": "https://jobs.teradyne.com",
+        "note": "SuccessFactors: first page /search/; later pages configured startrow=25,50,... . Verify declared windows/total and unique numeric IDs. Rows title, location, function, subsidiary, detail href. Read detail Company rather than assuming parent employer; retain full Opportunity Overview/All About You/Compensation. Changed count, repeated/missing pages or sparse details are incomplete."
+      }
+    ],
+    "indeed_keywords": [
+      "Teradyne Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Sierra",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "Sierra"
+      }
+    ],
+    "indeed_keywords": [
+      "Sierra Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Vercel",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "vercel"
+      }
+    ],
+    "indeed_keywords": [
+      "Vercel Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Future Secure AI",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "futuresecureai"
+      }
+    ],
+    "indeed_keywords": [
+      "Future Secure AI Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "DatologyAI",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "DatologyAI"
+      }
+    ],
+    "indeed_keywords": [
+      "DatologyAI Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Reducto",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "reducto"
+      }
+    ],
+    "indeed_keywords": [
+      "Reducto Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Ouster",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "custom",
+        "type": "html_listing",
+        "fetch_method": "web_fetch",
+        "endpoint": "https://ouster.applytojob.com/apply/",
+        "drill_in_base": "https://ouster.applytojob.com",
+        "note": "JazzHR: parse every .jobs-list /apply/<stable-id>/<title> link and any pagination. Detail #job-description, title, location; exclude application form text from JD. Dates can be unknown; retrieval time is not posting time. Canonical custom:ouster:{stable-id}."
+      }
+    ],
+    "indeed_keywords": [
+      "Ouster Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Ambarella",
+    "category": "Semiconductor",
+    "ats": [
+      {
+        "provider": "workday",
+        "host": "ambarella.wd108.myworkdayjobs.com",
+        "tenant": "ambarella",
+        "site": "Ambarella"
+      }
+    ],
+    "indeed_keywords": [
+      "Ambarella Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Coherent",
+    "category": "Semiconductor",
+    "ats": [
+      {
+        "provider": "custom",
+        "type": "json_api",
+        "fetch_method": "bash_curl",
+        "endpoint": "https://hcwp.fa.us2.oraclecloud.com/hcmRestApi/resources/latest/recruitingCEJobRequisitions?onlyData=true&expand=requisitionList&finder=findReqs%3BsiteNumber%3DCX_1%2Ckeyword%3DProduct%2Climit%3D100%2Coffset%3D{offset}",
+        "drill_in_base": "https://hcwp.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/",
+        "note": "Oracle CX_1 US scope: substitute {offset} inside finder; limit=100. Require items[0].Offset/Limit match request; read requisitionList/TotalJobsCount and distinct Id. Map Title, PrimaryLocation, PostedDate. Detail GET https://hcwp.fa.us2.oraclecloud.com/hcmRestApi/resources/latest/recruitingCEJobRequisitionDetails?onlyData=true&expand=all&finder=ById;Id={Id},siteNumber=CX_1 . Verify items[0].Id; full ExternalDescriptionStr/ExternalQualificationsStr/ExternalResponsibilitiesStr; date ExternalPostedStartDate; pay requisitionFlexFields Prompt=Pay Scale. Canonical oracle:coherent:{Id}; listing drill_in_base+Id."
+      }
+    ],
+    "indeed_keywords": [
+      "Coherent Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Credo",
+    "category": "Semiconductor",
+    "ats": [
+      {
+        "provider": "custom",
+        "type": "html_listing",
+        "fetch_method": "web_fetch",
+        "endpoint": "https://credosemi.com/about-credo/careers/",
+        "drill_in_base": "https://credo.careers.hibob.com",
+        "note": "Parse all tbody.job-row, including hidden client-paginated rows. Title tr.job-main-row first td, location data-loc, department data-dept, complete JD .job-detail-row .descriptions, identity from HiBob /jobs/<uuid>/apply. Reconcile unique rows with .jobs-count[data-total]. Do not parse only visible rows or use page dateModified as posting date."
+      }
+    ],
+    "indeed_keywords": [
+      "Credo Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "AfterQuery",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "AfterQuery"
+      }
+    ],
+    "indeed_keywords": [
+      "AfterQuery Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Machina Labs",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "lever",
+        "slug": "MachinaLabs"
+      }
+    ],
+    "indeed_keywords": [
+      "Machina Labs Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Etched",
+    "category": "Semiconductor",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "etched"
+      }
+    ],
+    "indeed_keywords": [
+      "Etched Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Render",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "render"
+      }
+    ],
+    "indeed_keywords": [
+      "Render Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Zuora",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "greenhouse",
+        "slug": "zuora"
+      }
+    ],
+    "indeed_keywords": [
+      "Zuora Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Quadric",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "quadric"
+      }
+    ],
+    "indeed_keywords": [
+      "Quadric Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Cloudera",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "workday",
+        "host": "cloudera.wd5.myworkdayjobs.com",
+        "tenant": "cloudera",
+        "site": "External_Career"
+      }
+    ],
+    "indeed_keywords": [
+      "Cloudera Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "StratusGrid",
+    "category": "Unclassified",
+    "ats": [
+      {
+        "provider": "ashby",
+        "slug": "stratusgrid"
+      }
+    ],
+    "indeed_keywords": [
+      "StratusGrid Product Manager"
+    ],
+    "search_mode": "full"
+  },
+  {
+    "name": "Lam Research",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Lam Research Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "HP",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "HP Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Tektronix",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Tektronix Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Daimler Truck North America",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Daimler Truck North America Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Precision Castparts",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Precision Castparts Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "eBay",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "eBay Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "CDK Global",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "CDK Global Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "New Relic",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "New Relic Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Columbia Sportswear",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Columbia Sportswear Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "adidas",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "adidas Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "On",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "On Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Kaiser Permanente",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Kaiser Permanente Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Providence",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Providence Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Cambia Health Solutions",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Cambia Health Solutions Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "The Standard",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "The Standard Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Portland General Electric",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Portland General Electric Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "PacifiCorp",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "PacifiCorp Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "U.S. Bank",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "U.S. Bank Product Manager"
+    ],
+    "search_mode": "signal_only"
+  },
+  {
+    "name": "Kroger/Fred Meyer",
+    "category": "Unclassified",
+    "ats": [],
+    "indeed_keywords": [
+      "Kroger/Fred Meyer Product Manager"
+    ],
+    "search_mode": "signal_only"
   }
-}
+]

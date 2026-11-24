@@ -1,0 +1,27 @@
+{
+  "setup_reviewed": false,
+  "timezone": "UTC",
+  "profile": {
+    "summary": "{{YOUR_FACTUAL_SUMMARY}}",
+    "evidence": ["{{SUPPORTED_EXPERIENCE_AND_SCOPE}}"],
+    "gaps": [],
+    "resume_variants": ["Primary"]
+  },
+  "titles": {
+    "include": ["Product Manager", "Product Management"],
+    "exclude": ["Director", "VP", "Chief", "Head of", "Product Management Manager", "Product Marketing Manager", "Associate Product Manager", "Junior Product Manager"],
+    "semiconductor_exceptions": true,
+    "people_management": "unknown"
+  },
+  "geography": {"countries": [], "metros": [], "remote": "unknown", "relocation": "unknown", "exceptions": "review"},
+  "compensation": {"currency": "USD", "base_floor": null, "employment_types": []},
+  "work_authorization": "unknown",
+  "domains": {"prioritize": [], "adjacent": [], "exclude": []},
+  "soft_preferences": [],
+  "discovery_queries": [],
+  "freshness_days": 7,
+  "review_threshold": 70,
+  "absent_preferred_score": 15,
+  "budgets": {"web_search_calls": 25, "web_fetch_calls": 40, "new_actions": 20, "company_recovery": 1, "optional_queries": 4, "indeed_calls": 60},
+  "tools": {"email_enabled": false, "archive_email": false, "indeed_enabled": false}
+}

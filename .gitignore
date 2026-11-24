@@ -21,3 +21,13 @@ applications/
 Applications/
 resumes/
 resume/
+Runtime/
+Instructions/
+Leads/
+.archive/
+.env
+.env.*
+settings.json
+welcome-answers.md
+__pycache__/
+*.pyc

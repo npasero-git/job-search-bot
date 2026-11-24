@@ -1,37 +1,12 @@
-# Candidate Profile
+# Scout Profile
 
-Replace this file with a concise, factual background profile used by the scoring rubric.
+## Summary
+{{PROFILE_SUMMARY}}
 
-## Target Roles
+## Evidence
+{{PROFILE_EVIDENCE}}
 
-- Primary lane:
-- Secondary lane:
-- Adjacent lane:
-- Avoid:
+## Boundaries
+{{PROFILE_GAPS}}
 
-## Core Evidence
-
-- Years of experience:
-- Product domains:
-- Technical domains:
-- Customer/user domains:
-- Revenue, launch, adoption, or scale metrics:
-
-## Resume Variants
-
-- Main:
-- Variant 1:
-- Variant 2:
-
-## Scoring Constraints
-
-- Constraint 1:
-- Constraint 2:
-- Constraint 3:
-
-## Scoring Guidance
-
-- Reward:
-- Penalize:
-- Hard filters:
-- Preferred qualification interpretation:
+This private profile is derived from user-approved settings after the welcome interview. Distinguish professional ownership, adjacent work, consulting, coursework and personal projects. Keep scale, outcomes, dates and attribution only when supported. Applications, target companies and interviews are not employment history. Preferences and budgets live in settings.json; sensitive raw source records remain outside scout inputs.
